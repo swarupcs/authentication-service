@@ -6,3 +6,6 @@ npx tsc --init
 
 ## Add types of node
 npm i -D @types/node
+
+## Prettier Setup
+npm install --save-dev --save-exact prettier
