@@ -1,5 +1,14 @@
-function login(username: string): string {
-    return username;
-}
+import app from "./app";
+import { Config } from "./config";
 
-login("username");
+const startServer = () => {
+    const PORT = Config.PORT;
+    try {
+        app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
+    }
+};
+
+startServer();

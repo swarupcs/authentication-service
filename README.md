@@ -34,6 +34,22 @@ npm install --save-dev lint-staged
 
 npm install dotenv --save
 
+## Express Setup for typescript
+
+npm i express
+npm i -D @types/express
+
+## Nodemon setup
+
+npm i -D nodemon ts-node
+
+
+
+
+
+
+
+
 # Important Resources
 
 https://typescript-eslint.io/
