@@ -43,6 +43,64 @@ npm i -D @types/express
 
 npm i -D nodemon ts-node
 
+## Logger Setup
+
+npm i winston
+npm i -D @types/winston
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Important Resources
 
 https://typescript-eslint.io/
