@@ -65,6 +65,9 @@ npm install supertest --save-dev
 npm install @types/supertest --save-dev
 npm install ts-jest --save-dev
 
+## Build Docker File
+docker build -t auth-service:dev -f docker/dev/Dockerfile .
+
 # husky pre-commit
 
 npx lint-staged
