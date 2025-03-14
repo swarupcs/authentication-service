@@ -22,7 +22,8 @@ npx husky init
 ## Install lint-staged
 npm install --save-dev lint-staged
 
-
+## Install dotenv
+npm install dotenv --save
 
 
 
