@@ -53,6 +53,11 @@ npm i -D @types/winston
 npm i http-error
 npm i -D @types/http-errors
 
+
+# husky pre-commit
+
+npx lint-staged
+
 # Important Resources
 
 https://typescript-eslint.io/
