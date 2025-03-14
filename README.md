@@ -48,59 +48,6 @@ npm i -D nodemon ts-node
 npm i winston
 npm i -D @types/winston
 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Important Resources
 
 https://typescript-eslint.io/
