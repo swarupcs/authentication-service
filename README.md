@@ -19,7 +19,8 @@ npm install --save-dev husky
 ## husky init
 npx husky init
 
-
+## Install lint-staged
+npm install --save-dev lint-staged
 
 
 
