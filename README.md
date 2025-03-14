@@ -48,6 +48,11 @@ npm i -D nodemon ts-node
 npm i winston
 npm i -D @types/winston
 
+## Http-Error
+
+npm i http-error
+npm i -D @types/http-errors
+
 # Important Resources
 
 https://typescript-eslint.io/

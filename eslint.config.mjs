@@ -17,6 +17,8 @@ export default tseslint.config(
         rules: {
             // "no-console": "warn",
             // "dot-notation": "off",
+            "@typescript-eslint/no-misused-promises": "off",
+            "@typescript-eslint/require-await": "off",
         },
     },
 );
