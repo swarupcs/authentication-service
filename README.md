@@ -54,6 +54,7 @@ npm i http-error
 npm i -D @types/http-errors
 
 ## Jest Setup
+
 npm install --save-dev jest
 npm install --save-dev @types/jest
 npx ts-jest config:init
@@ -63,9 +64,6 @@ npx ts-jest config:init
 npm install supertest --save-dev
 npm install @types/supertest --save-dev
 npm install ts-jest --save-dev
-
-
-
 
 # husky pre-commit
 
