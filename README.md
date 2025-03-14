@@ -43,13 +43,6 @@ npm i -D @types/express
 
 npm i -D nodemon ts-node
 
-
-
-
-
-
-
-
 # Important Resources
 
 https://typescript-eslint.io/
