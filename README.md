@@ -10,6 +10,16 @@ npm i -D @types/node
 ## Prettier Setup
 npm install --save-dev --save-exact prettier
 
+## Setup eslint
+npm install --save-dev eslint @eslint/js typescript-eslint
+
+## Setup husky
+npm install --save-dev husky
+
+## husky init
+npx husky init
+
+
 
 
 
