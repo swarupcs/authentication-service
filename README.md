@@ -9,3 +9,23 @@ npm i -D @types/node
 
 ## Prettier Setup
 npm install --save-dev --save-exact prettier
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Important Resources
+
+https://typescript-eslint.io/
+
+https://eslint.org/docs/latest/
