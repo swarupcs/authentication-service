@@ -77,6 +77,30 @@ docker run --rm -it -v "${PWD}:/usr/src/app" -v "/usr/src/app/node_modules" --en
 
 npx lint-staged
 
+## Docker Volume for Postgres
+
+docker pull postgres
+
+docker volume create mernpgdata
+
+docker volume ls
+
+docker run --rm --name mernpg-container -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -v mernpgdata:/var/lib/postgresql/data -p 5432:5432 -d postgres
+
+docker ps
+
+
+## TypeORM setup
+
+npm i typeorm --save
+
+npm i reflect-metadata --save
+
+npm install pg --save
+
+npx typeorm init --database postgres
+
+
 # Important Resources
 
 https://typescript-eslint.io/

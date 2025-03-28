@@ -139,3 +139,6 @@ dist
 
 
 .vscode/settings.json
+.env.dev
+.env.prod
+.env.test
