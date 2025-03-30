@@ -89,7 +89,6 @@ docker run --rm --name mernpg-container -e POSTGRES_USER=root -e POSTGRES_PASSWO
 
 docker ps
 
-
 ## TypeORM setup
 
 npm i typeorm --save
@@ -100,10 +99,9 @@ npm install pg --save
 
 npx typeorm init --database postgres
 
-
 ## ignore husky verification
-git commit -m "commit" --no-verify
 
+git commit -m "commit" --no-verify
 
 # Important Resources
 
