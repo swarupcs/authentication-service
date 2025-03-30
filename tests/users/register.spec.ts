@@ -3,7 +3,7 @@ import app from "../../src/app";
 import { User } from "../../src/entity/User";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
-import { truncateTables } from "../utils";
+import { Roles } from "../../src/constants";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -14,7 +14,8 @@ describe("POST /auth/register", () => {
 
     beforeEach(async () => {
         // Database truncate
-        await truncateTables(connection);
+        await connection.dropDatabase();
+        await connection.synchronize();
     });
 
     afterAll(async () => {
@@ -25,9 +26,9 @@ describe("POST /auth/register", () => {
         it("should return the 201 status code", async () => {
             // Arrange
             const userData = {
-                firstName: "Rakesh",
-                lastName: "K",
-                email: "rakesh@mern.space",
+                firstName: "swarup",
+                lastName: "D",
+                email: "swarup@mern.space",
                 password: "secret",
             };
             // Act
@@ -42,9 +43,9 @@ describe("POST /auth/register", () => {
         it("should return valid json response", async () => {
             // Arrange
             const userData = {
-                firstName: "Rakesh",
-                lastName: "K",
-                email: "rakesh@mern.space",
+                firstName: "swarup",
+                lastName: "D",
+                email: "swarup@mern.space",
                 password: "secret",
             };
             // Act
@@ -61,9 +62,9 @@ describe("POST /auth/register", () => {
         it("should persist the user in the database", async () => {
             // Arrange
             const userData = {
-                firstName: "Rakesh",
-                lastName: "K",
-                email: "rakesh@mern.space",
+                firstName: "swarup",
+                lastName: "D",
+                email: "swarup@mern.space",
                 password: "secret",
             };
             // Act
@@ -81,9 +82,9 @@ describe("POST /auth/register", () => {
         it("should return an id of the created user", async () => {
             // Arrange
             const userData = {
-                firstName: "Rakesh",
-                lastName: "K",
-                email: "rakesh@mern.space",
+                firstName: "swarup",
+                lastName: "D",
+                email: "swarup@mern.space",
                 password: "secret",
             };
             // Act
@@ -98,6 +99,24 @@ describe("POST /auth/register", () => {
             expect((response.body as Record<string, string>).id).toBe(
                 users[0].id,
             );
+        });
+
+        it("should assign a customer role", async () => {
+            // Arrange
+            const userData = {
+                firstName: "swarup",
+                lastName: "D",
+                email: "swarup@mern.space",
+                password: "secret",
+            };
+            // Act
+            await request(app).post("/auth/register").send(userData);
+
+            // Assert
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            expect(users[0]).toHaveProperty("role");
+            expect(users[0].role).toBe(Roles.CUSTOMER);
         });
     });
     describe("Fields are missing", () => {});

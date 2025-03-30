@@ -101,6 +101,10 @@ npm install pg --save
 npx typeorm init --database postgres
 
 
+## ignore husky verification
+git commit -m "commit" --no-verify
+
+
 # Important Resources
 
 https://typescript-eslint.io/
