@@ -20,8 +20,8 @@ export default tseslint.config(
             },
         },
         rules: {
-            // "no-console": "warn",
-            // "dot-notation": "off",
+            "no-console": "warn",
+            "dot-notation": "off",
             "@typescript-eslint/no-misused-promises": "off",
             "@typescript-eslint/require-await": "off",
             "@typescript-eslint/no-unused-vars": "off",
