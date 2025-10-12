@@ -383,7 +383,7 @@ describe("POST /auth/register", () => {
                 firstName: "swarup",
                 lastName: "D",
                 email: "",
-                password: "password", // less than 8 chars
+                password: "password",
             };
             // Act
             const response = await request(app)
