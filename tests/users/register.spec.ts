@@ -165,7 +165,7 @@ describe("POST /auth/register", () => {
             // Arrange
             const userData = {
                 firstName: "swarup",
-                lastName: "K",
+                lastName: "D",
                 email: "",
                 password: "secret",
             };
@@ -181,7 +181,25 @@ describe("POST /auth/register", () => {
             expect(users).toHaveLength(0);
         });
 
-        it.todo("should return 400 status code if firstName is missing");
+        it("should return 400 status code if firstName is missing", async () => {
+            // Arrange
+            const userData = {
+                firstName: "",
+                lastName: "D",
+                email: "swarup@mern.space",
+                password: "secret",
+            };
+            // Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            // Assert
+            expect(response.statusCode).toBe(400);
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            expect(users).toHaveLength(0);
+        });
         it.todo("should return 400 status code if lastName is missing");
         it.todo("should return 400 status code if password is missing");
     });
@@ -191,7 +209,7 @@ describe("POST /auth/register", () => {
             // Arrange
             const userData = {
                 firstName: "swarup",
-                lastName: "K",
+                lastName: "D",
                 email: " swarup@mern.space ",
                 password: "secret",
             };
