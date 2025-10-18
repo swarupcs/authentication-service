@@ -121,16 +121,19 @@ https://eslint.org/docs/latest/
 ## For migration
 
 ## Generate Migration
+
 ```
 npm run migration:generate -- src/migration/migration -d src/config/data-source.ts
 ```
 
 ### Run Migration
+
 ```
 npm run migration:run -- -d src/config/data-source.ts
 ```
 
 ### Create Migration
+
 ```
 npm run migration:create -- src/migration/YourMigrationName -d src/config/data-source.ts
 ```
