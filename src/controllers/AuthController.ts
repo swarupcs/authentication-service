@@ -178,7 +178,7 @@ export class AuthController {
     async self(req: AuthRequest, res: Response) {
         // token req.auth.id
         const user = await this.userService.findById(Number(req.auth.sub));
-        console.log("user", user);
+        // console.log("user", user);
         res.json({ ...user, password: undefined });
     }
 
