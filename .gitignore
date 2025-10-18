@@ -142,3 +142,6 @@ dist
 .env.dev
 .env.prod
 .env.test
+
+
+certs
