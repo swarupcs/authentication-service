@@ -144,4 +144,6 @@ dist
 .env.test
 
 
-certs
+certs/
+public/
+
