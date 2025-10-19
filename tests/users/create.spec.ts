@@ -6,6 +6,7 @@ import { AppDataSource } from "../../src/config/data-source";
 import app from "../../src/app";
 import { Roles } from "../../src/constants";
 import { User } from "../../src/entity/User";
+import { Tenant } from "../../src/entity/Tenant";
 
 describe("POST /users", () => {
     let connection: DataSource;
@@ -32,6 +33,12 @@ describe("POST /users", () => {
 
     describe("Given all fields", () => {
         it("should persist the user in the database", async () => {
+            // Create tenant first
+            const tenantRepository = connection.getRepository(Tenant);
+            const tenant = await tenantRepository.save({
+                name: "Test tenant",
+                address: "Test address",
+            });
             const adminToken = jwks.token({
                 sub: "1",
                 role: Roles.ADMIN,
@@ -43,7 +50,7 @@ describe("POST /users", () => {
                 lastName: "D",
                 email: "swarup@mern.space",
                 password: "password",
-                tenantId: 1,
+                tenantId: tenant.id,
                 role: Roles.MANAGER,
             };
 
@@ -65,6 +72,12 @@ describe("POST /users", () => {
         });
 
         it("should create a manager user", async () => {
+            // Create tenant
+            const tenantRepository = connection.getRepository(Tenant);
+            const tenant = await tenantRepository.save({
+                name: "Test tenant",
+                address: "Test address",
+            });
             const adminToken = jwks.token({
                 sub: "1",
                 role: Roles.ADMIN,
@@ -76,7 +89,7 @@ describe("POST /users", () => {
                 lastName: "D",
                 email: "swarup@mern.space",
                 password: "password",
-                tenantId: 1,
+                tenantId: tenant.id,
                 role: Roles.MANAGER,
             };
 
@@ -95,6 +108,32 @@ describe("POST /users", () => {
             expect(users[0].role).toBe(Roles.MANAGER);
         });
 
-        it.todo("should return 403 if non admin user tries to create a user");
+        it("should return 403 if non admin user tries to create a user", async () => {
+            const nonAdminToken = jwks.token({
+                sub: "1",
+                role: Roles.MANAGER,
+            });
+
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "password",
+                tenantId: 1,
+            };
+
+            // Add token to cookie
+            const response = await request(app)
+                .post("/users")
+                .set("Cookie", [`accessToken=${nonAdminToken}`])
+                .send(userData);
+
+            expect(response.statusCode).toBe(403);
+
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+
+            expect(users).toHaveLength(0);
+        });
     });
 });
