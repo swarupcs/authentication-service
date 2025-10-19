@@ -137,3 +137,12 @@ npm run migration:run -- -d src/config/data-source.ts
 ```
 npm run migration:create -- src/migration/YourMigrationName -d src/config/data-source.ts
 ```
+
+
+### After Build the Typescript Project
+ - go to the dist folder
+ - run the below command
+
+ ```
+NODE_ENV=dev node src/server.js
+ ```
