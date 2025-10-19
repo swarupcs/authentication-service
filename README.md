@@ -135,15 +135,19 @@ npm run migration:run -- -d src/config/data-source.ts
 ### Create Migration
 
 #### ✅ Option 1: If you just want a blank migration file (manual changes)
+
 ```
 npm run migration:create -- src/migration/add_refreshtoken_cascade
 ```
+
 - This will create something like:
+
 ```
 src/migration/1739948456789-add_refreshtoken_cascade.ts
 ```
 
 #### ✅ Option 2: If you want TypeORM to auto-generate the migration
+
 ```
 npm run migration:generate -- src/migration/add_refreshtoken_cascade -d src/config/data-source.ts
 ```
