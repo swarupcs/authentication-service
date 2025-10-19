@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
+        "noEmit": false,
+        "noEmitOnError": true
+    },
+    "include": ["src"],
+    "exclude": [
+        "tests",
+        "**/*.spec.ts",
+        "node_modules",
+        "dist",
+        "jest.config.js",
+        "eslint.config.*", // ignore all eslint config files
+        "scripts/**/*.mjs" // if you want to exclude mjs scripts too
+    ]
+}

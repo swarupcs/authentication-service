@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "build": "tsc",
+        "old_build": "tsc",
+        "build": "tsc --project tsconfig.build.json",
         "dev": "cross-env NODE_ENV=dev nodemon --exec ts-node --project tsconfig.json src/server.ts",
         "format:check": "prettier . --check",
         "format:fix": "prettier . --write",
