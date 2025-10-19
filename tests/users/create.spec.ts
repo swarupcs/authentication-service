@@ -44,16 +44,21 @@ describe("POST /users", () => {
                 email: "swarup@mern.space",
                 password: "password",
                 tenantId: 1,
+                role: Roles.MANAGER,
             };
 
             // Add token to cookie
-            await request(app)
+            const response = await request(app)
                 .post("/users")
                 .set("Cookie", [`accessToken=${adminToken}`])
                 .send(userData);
 
+            console.log("Response status:", response.status);
+            console.log("Response body:", response.body);
+
             const userRepository = connection.getRepository(User);
             const users = await userRepository.find();
+            console.log("users", users);
 
             expect(users).toHaveLength(1);
             expect(users[0].email).toBe(userData.email);
@@ -72,6 +77,7 @@ describe("POST /users", () => {
                 email: "swarup@mern.space",
                 password: "password",
                 tenantId: 1,
+                role: Roles.MANAGER,
             };
 
             // Add token to cookie
@@ -82,6 +88,8 @@ describe("POST /users", () => {
 
             const userRepository = connection.getRepository(User);
             const users = await userRepository.find();
+
+            console.log("users", users);
 
             expect(users).toHaveLength(1);
             expect(users[0].role).toBe(Roles.MANAGER);
