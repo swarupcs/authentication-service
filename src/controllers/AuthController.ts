@@ -9,6 +9,7 @@ import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { TokenService } from "../services/TokenService";
 import { CredentialService } from "../services/CredentialService";
+import { Roles } from "../constants";
 export class AuthController {
     constructor(
         private userService: UserService,
@@ -43,6 +44,7 @@ export class AuthController {
                 lastName,
                 email,
                 password,
+                role: Roles.CUSTOMER,
             });
             this.logger.info("User has been registered", { id: user.id });
             let privateKey: Buffer;
@@ -114,7 +116,7 @@ export class AuthController {
         });
 
         try {
-            const user = await this.userService.findByEmail(email);
+            const user = await this.userService.findByEmailWithPassword(email);
             if (!user) {
                 const error = createHttpError(
                     400,
@@ -178,7 +180,7 @@ export class AuthController {
     async self(req: AuthRequest, res: Response) {
         // token req.auth.id
         const user = await this.userService.findById(Number(req.auth.sub));
-        console.log("user", user);
+        // console.log("user", user);
         res.json({ ...user, password: undefined });
     }
 
