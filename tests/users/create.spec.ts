@@ -52,17 +52,17 @@ describe("POST /users", () => {
             };
 
             // Add token to cookie
-            const response = await request(app)
+            await request(app)
                 .post("/users")
                 .set("Cookie", [`accessToken=${adminToken}`])
                 .send(userData);
 
-            console.log("Response status:", response.status);
-            console.log("Response body:", response.body);
+            // console.log("Response status:", response.status);
+            // console.log("Response body:", response.body);
 
             const userRepository = connection.getRepository(User);
             const users = await userRepository.find();
-            console.log("users", users);
+            // console.log("users", users);
 
             expect(users).toHaveLength(1);
             expect(users[0].email).toBe(userData.email);
@@ -95,7 +95,7 @@ describe("POST /users", () => {
             const userRepository = connection.getRepository(User);
             const users = await userRepository.find();
 
-            console.log("users", users);
+            // console.log("users", users);
 
             expect(users).toHaveLength(1);
             expect(users[0].role).toBe(Roles.MANAGER);
