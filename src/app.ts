@@ -6,11 +6,13 @@ import logger from "./config/logger";
 import { HttpError } from "http-errors";
 import authRouter from "./routes/auth";
 import tenantRouter from "./routes/tenant";
+import userRouter from "./routes/user";
 
 const app = express();
 app.use(express.static("public"));
 app.use(cookieParser());
 app.use(express.json());
+app.use("/users", userRouter);
 
 app.get("/", async (req, res) => {
     res.send("Welcome to Auth service");
