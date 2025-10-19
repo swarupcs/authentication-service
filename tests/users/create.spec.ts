@@ -39,9 +39,9 @@ describe("POST /users", () => {
 
             // Register user
             const userData = {
-                firstName: "Rakesh",
-                lastName: "K",
-                email: "rakesh@mern.space",
+                firstName: "swarup",
+                lastName: "D",
+                email: "swarup@mern.space",
                 password: "password",
                 tenantId: 1,
             };
@@ -67,9 +67,9 @@ describe("POST /users", () => {
 
             // Register user
             const userData = {
-                firstName: "Rakesh",
-                lastName: "K",
-                email: "rakesh@mern.space",
+                firstName: "swarup",
+                lastName: "D",
+                email: "swarup@mern.space",
                 password: "password",
                 tenantId: 1,
             };
