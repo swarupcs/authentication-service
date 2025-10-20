@@ -24,15 +24,23 @@ export class TokenService {
                 privateKey = privateKey.replace(/\\n/g, "\n");
             }
 
-            // ✅ Normalize line endings (CRLF → LF) to avoid Linux parse errors
+            // Normalize line endings
             privateKey = privateKey.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+            // ✅ Trim and ensure trailing newline for OpenSSL parsing
+            privateKey = privateKey.trim() + "\n";
+
+            // ✅ Remove any invisible BOM characters
+            privateKey = privateKey.replace(/^\uFEFF/, "");
 
             console.log(
                 "PRIVATE_KEY (first 80 chars):",
                 JSON.stringify(Config.PRIVATE_KEY?.slice(0, 80)),
             );
 
-            console.log("private key", privateKey);
+            console.log("PRIVATE_KEY length:", privateKey.length);
+            console.log("Starts with:", privateKey.slice(0, 40));
+            console.log("Ends with:", privateKey.slice(-40));
 
             // Optional debug (for CI verification)
             // console.log("Private key starts with:", privateKey.slice(0, 50));
