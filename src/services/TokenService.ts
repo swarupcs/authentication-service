@@ -15,6 +15,8 @@ export class TokenService {
         try {
             let privateKey = Config.PRIVATE_KEY;
 
+            console.log("private key", privateKey);
+
             // ✅ Handle both escaped (\n) and real multiline PEMs
             if (privateKey.includes("\\n")) {
                 privateKey = privateKey.replace(/\\n/g, "\n");
