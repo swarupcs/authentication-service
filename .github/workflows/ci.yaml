@@ -23,8 +23,10 @@ jobs:
             - name: Run eslint
               run: npm run lint
             - name: Test and coverage
+            #   run: npm run test:debug
               run: npm run test:debug
               env:
+                  CI: false
                   DB_HOST: ${{ secrets.TEST_DB_HOST }}
                   DB_PORT: ${{ secrets.TEST_DB_PORT }}
                   DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
