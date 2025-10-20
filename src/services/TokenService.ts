@@ -24,6 +24,9 @@ export class TokenService {
                 privateKey = privateKey.replace(/\\n/g, "\n");
             }
 
+            // ✅ Normalize line endings (CRLF → LF) to avoid Linux parse errors
+            privateKey = privateKey.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
             console.log(
                 "PRIVATE_KEY (first 80 chars):",
                 JSON.stringify(Config.PRIVATE_KEY?.slice(0, 80)),
