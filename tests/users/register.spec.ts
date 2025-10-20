@@ -38,6 +38,7 @@ describe("POST /auth/register", () => {
                 .post("/auth/register")
                 .send(userData);
             console.log("response", response);
+            console.log("response.statusCode", response.statusCode);
 
             // Assert
             expect(response.statusCode).toBe(201);
@@ -96,6 +97,7 @@ describe("POST /auth/register", () => {
                 .send(userData);
 
             console.log("response", response);
+            console.log("response.body", response.body);
 
             // Assert
             expect(response.body).toHaveProperty("id");
