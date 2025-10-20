@@ -8,12 +8,13 @@ import { Repository } from "typeorm";
 export class TokenService {
     constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
     generateAccessToken(payload: JwtPayload) {
+        let privateKey: string;
         if (!Config.PRIVATE_KEY) {
             throw createHttpError(500, "PRIVATE_KEY is not set");
         }
 
         try {
-            let privateKey = Config.PRIVATE_KEY;
+            privateKey = Config.PRIVATE_KEY;
 
             // 🔹 Normalize all line endings and escaped characters
             privateKey = privateKey
@@ -33,17 +34,17 @@ export class TokenService {
             }
 
             privateKey += "\n"; // Always ensure a trailing newline
-
-            const accessToken = sign(payload, privateKey, {
-                algorithm: "RS256",
-                expiresIn: "1h",
-                issuer: "auth-service",
-            });
-
-            return accessToken;
         } catch (err) {
             throw createHttpError(500, "Error while reading private key");
         }
+
+        const accessToken = sign(payload, privateKey, {
+            algorithm: "RS256",
+            expiresIn: "1h",
+            issuer: "auth-service",
+        });
+
+        return accessToken;
     }
 
     generateRefreshToken(payload: JwtPayload) {

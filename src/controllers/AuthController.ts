@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import { NextFunction, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { AuthRequest, RegisterUserRequest } from "../types";
@@ -10,7 +8,6 @@ import createHttpError from "http-errors";
 import { TokenService } from "../services/TokenService";
 import { CredentialService } from "../services/CredentialService";
 import { Roles } from "../constants";
-import { Config } from "../config";
 export class AuthController {
     constructor(
         private userService: UserService,
