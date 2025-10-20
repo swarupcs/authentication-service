@@ -89,8 +89,8 @@ docker volume create mernpgdata
 
 docker volume ls
 
-
 ### Start Postgres Container
+
 ```
 docker run --rm --name mernpg-container -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -v mernpgdata:/var/lib/postgresql/data -p 5432:5432 -d postgres
 ```
@@ -170,7 +170,6 @@ npm run migration:generate -- src/migration/add_refreshtoken_cascade -d src/conf
 ```
 NODE_ENV=dev node src/server.js
 ```
-
 
 ## Build for production docker file
 
