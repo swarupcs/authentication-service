@@ -24,10 +24,10 @@ jobs:
               run: npm run lint
             - name: Debug PRIVATE_KEY format
               run: |
-                echo "PRIVATE_KEY (first 100 chars):"
-                echo "${{ secrets.PRIVATE_KEY }}" | head -c 100
+                  echo "PRIVATE_KEY (first 100 chars):"
+                  echo "${{ secrets.PRIVATE_KEY }}" | head -c 100
             - name: Test and coverage
-            #   run: npm run test:debug
+              #   run: npm run test:debug
               run: npm run test:debug
               env:
                   CI: false
