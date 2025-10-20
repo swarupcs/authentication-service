@@ -10,7 +10,7 @@ const startServer = async () => {
         logger.info("Database connected successfully.");
         app.listen(PORT, () => {
             logger.info(`Listening on port ${PORT}`);
-            // eslint-disable-next-line no-console
+
             console.log(`Server is running on http://localhost:${PORT}`);
         });
     } catch (err) {

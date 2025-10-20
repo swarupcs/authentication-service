@@ -24,6 +24,13 @@ export class TokenService {
                 privateKey = privateKey.replace(/\\n/g, "\n");
             }
 
+            console.log(
+                "PRIVATE_KEY (first 80 chars):",
+                JSON.stringify(Config.PRIVATE_KEY?.slice(0, 80)),
+            );
+
+            console.log("private key", privateKey);
+
             // Optional debug (for CI verification)
             // console.log("Private key starts with:", privateKey.slice(0, 50));
             // privateKey = Config.PRIVATE_KEY?.replace(/\\n/g, "\n");
