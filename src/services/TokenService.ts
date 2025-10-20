@@ -9,6 +9,7 @@ export class TokenService {
     constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
     generateAccessToken(payload: JwtPayload) {
         let privateKey: string;
+        // console.log("Config.PRIVATE_KEY", Config.PRIVATE_KEY);
         if (!Config.PRIVATE_KEY) {
             const error = createHttpError(500, "PRIVATE_KEY is not set");
             throw error;
@@ -16,7 +17,18 @@ export class TokenService {
 
         try {
             privateKey = Config.PRIVATE_KEY;
+            // 🔹 Handle both formats:
+            // (1) Escaped with \n — common in GitHub Actions secrets
+            // (2) Actual multiline PEM — common in local .env files
+            if (privateKey.includes("\\n")) {
+                privateKey = privateKey.replace(/\\n/g, "\n");
+            }
+
+            // Optional debug (for CI verification)
+            // console.log("Private key starts with:", privateKey.slice(0, 50));
             // privateKey = Config.PRIVATE_KEY?.replace(/\\n/g, "\n");
+
+            // console.log("private Key", privateKey);
         } catch (err) {
             const error = createHttpError(
                 500,
