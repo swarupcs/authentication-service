@@ -8,6 +8,7 @@
         "dev": "cross-env NODE_ENV=dev nodemon --exec ts-node --project tsconfig.json src/server.ts",
         "format:check": "prettier . --check",
         "format:fix": "prettier . --write",
+        "lint": "eslint .",
         "lint:check": "eslint .",
         "lint:fix": "eslint . --fix",
         "test": "jest --no-cache --coverage --all --runInBand",
