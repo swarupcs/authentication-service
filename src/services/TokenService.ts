@@ -40,9 +40,16 @@ export class TokenService {
 
             return accessToken;
         } catch (err) {
-            console.error("JWT sign error:", err);
-            // throw createHttpError(500, "Error while reading private key");
-            throw err;
+            console.error("🔴 JWT sign failed:", err); // force log full error
+            console.error(
+                "🔴 PRIVATE_KEY (first 100):",
+                Config.PRIVATE_KEY?.slice(0, 100),
+            );
+            console.error(
+                "🔴 PRIVATE_KEY (last 100):",
+                Config.PRIVATE_KEY?.slice(-100),
+            );
+            throw err; // don't mask the error
         }
     }
 
