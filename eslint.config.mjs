@@ -12,6 +12,7 @@ export default tseslint.config(
             "jest.config.js",
             "coverage",
             ".github",
+            ".github/workflows/ci.yml",
         ],
     },
     {
