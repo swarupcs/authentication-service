@@ -15,7 +15,6 @@ const {
     DB_NAME,
     REFRESH_TOKEN_SECRET,
     JWKS_URI,
-    // PRIVATE_KEY,
 } = process.env;
 
 const PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
