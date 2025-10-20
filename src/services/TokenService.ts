@@ -4,7 +4,6 @@ import { Config } from "../config";
 import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
 import { Repository } from "typeorm";
-import crypto from "crypto";
 
 export class TokenService {
     constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
@@ -16,23 +15,33 @@ export class TokenService {
         try {
             let privateKey = Config.PRIVATE_KEY;
 
-            // Handle escaped newlines
+            // ✅ Handle both escaped (\n) and real multiline PEMs
             if (privateKey.includes("\\n")) {
                 privateKey = privateKey.replace(/\\n/g, "\n");
             }
 
-            // Normalize line endings and strip invisible chars
+            // ✅ Normalize line endings (Windows/Linux safe)
             privateKey = privateKey.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-            privateKey = privateKey.replace(/^\uFEFF/, "").trim() + "\n";
 
-            // ✅ Create a KeyObject (OpenSSL-native)
-            const keyObject = crypto.createPrivateKey({
-                key: privateKey,
-                format: "pem",
-            });
+            // ✅ Ensure PEM starts/ends correctly (validation)
+            privateKey = privateKey.trim();
+            if (
+                !privateKey.startsWith("-----BEGIN") ||
+                !privateKey.endsWith("-----END RSA PRIVATE KEY-----")
+            ) {
+                console.error("🔴 Invalid PRIVATE_KEY format detected");
+                console.error(
+                    "Starts with:",
+                    privateKey.slice(0, 40),
+                    "...",
+                    "Ends with:",
+                    privateKey.slice(-40),
+                );
+                throw createHttpError(500, "Invalid PRIVATE_KEY format");
+            }
 
-            // ✅ Use KeyObject directly in JWT sign
-            const accessToken = sign(payload, keyObject, {
+            // ✅ Sign the token
+            const accessToken = sign(payload, privateKey, {
                 algorithm: "RS256",
                 expiresIn: "1h",
                 issuer: "auth-service",
@@ -40,16 +49,16 @@ export class TokenService {
 
             return accessToken;
         } catch (err) {
-            console.error("🔴 JWT sign failed:", err); // force log full error
+            console.error("🔴 JWT signing failed:", err);
             console.error(
-                "🔴 PRIVATE_KEY (first 100):",
-                Config.PRIVATE_KEY?.slice(0, 100),
+                "🔴 PRIVATE_KEY (first 100 chars):",
+                JSON.stringify(Config.PRIVATE_KEY?.slice(0, 100)),
             );
             console.error(
-                "🔴 PRIVATE_KEY (last 100):",
-                Config.PRIVATE_KEY?.slice(-100),
+                "🔴 PRIVATE_KEY (last 100 chars):",
+                JSON.stringify(Config.PRIVATE_KEY?.slice(-100)),
             );
-            throw err; // don't mask the error
+            throw createHttpError(500, "Error while reading private key");
         }
     }
 
