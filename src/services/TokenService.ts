@@ -9,34 +9,29 @@ export class TokenService {
     constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
     generateAccessToken(payload: JwtPayload) {
         if (!Config.PRIVATE_KEY) {
-            const error = createHttpError(500, "PRIVATE_KEY is not set");
-            throw error;
+            throw createHttpError(500, "PRIVATE_KEY is not set");
         }
 
         try {
             let privateKey = Config.PRIVATE_KEY;
 
-            // Normalize newlines (redundant but safe)
-            privateKey =
-                privateKey
-                    .replace(/\r\n/g, "\n")
-                    .replace(/\r/g, "\n")
-                    .replace(/\\n/g, "\n")
-                    .replace(/^\uFEFF/, "")
-                    .trim() + "\n";
+            // 🔹 Normalize all line endings and escaped characters
+            privateKey = privateKey
+                .replace(/\r\n/g, "\n")
+                .replace(/\r/g, "\n")
+                .replace(/\\n/g, "\n")
+                .replace(/^\uFEFF/, "")
+                .trim();
 
-            // 🧠 Add these diagnostic logs:
-            console.log(
-                "🔍 PRIVATE_KEY line count:",
-                privateKey.split("\n").length,
-            );
-            console.log("🔍 First line:", privateKey.split("\n")[0]);
-            console.log("🔍 Last line:", privateKey.split("\n").slice(-2)[0]);
-            console.log(
-                "🔍 Starts with:",
-                JSON.stringify(privateKey.slice(0, 40)),
-            );
-            console.log("🔍 Ends with:", JSON.stringify(privateKey.slice(-40)));
+            // 🔹 Ensure the key has the correct headers/footers
+            if (!privateKey.startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
+                privateKey = `-----BEGIN RSA PRIVATE KEY-----\n${privateKey}`;
+            }
+            if (!privateKey.endsWith("-----END RSA PRIVATE KEY-----")) {
+                privateKey = `${privateKey}\n-----END RSA PRIVATE KEY-----`;
+            }
+
+            privateKey += "\n"; // Always ensure a trailing newline
 
             const accessToken = sign(payload, privateKey, {
                 algorithm: "RS256",
@@ -47,11 +42,7 @@ export class TokenService {
             return accessToken;
         } catch (err) {
             console.error("🔴 JWT sign failed:", err);
-            const error = createHttpError(
-                500,
-                "Error while reading private key",
-            );
-            throw error;
+            throw createHttpError(500, "Error while reading private key");
         }
     }
 
