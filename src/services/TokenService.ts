@@ -10,32 +10,17 @@ export class TokenService {
     generateAccessToken(payload: JwtPayload) {
         let privateKey: string;
         if (!Config.PRIVATE_KEY) {
-            throw createHttpError(500, "PRIVATE_KEY is not set");
+            const error = createHttpError(500, "SECRET_KEY is not set");
+            throw error;
         }
-
         try {
             privateKey = Config.PRIVATE_KEY;
-
-            // 🔹 Normalize all line endings and escaped characters
-            privateKey = privateKey
-                .replace(/\r\n/g, "\n")
-                .replace(/\r/g, "\n")
-                .replace(/\\n/g, "\n")
-                .replace(/^\uFEFF/, "")
-                .trim();
-
-            // console.log("private key", privateKey);
-            // 🔹 Ensure the key has the correct headers/footers
-            if (!privateKey.startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
-                privateKey = `-----BEGIN RSA PRIVATE KEY-----\n${privateKey}`;
-            }
-            if (!privateKey.endsWith("-----END RSA PRIVATE KEY-----")) {
-                privateKey = `${privateKey}\n-----END RSA PRIVATE KEY-----`;
-            }
-
-            privateKey += "\n"; // Always ensure a trailing newline
         } catch (err) {
-            throw createHttpError(500, "Error while reading private key");
+            const error = createHttpError(
+                500,
+                "Error while reading private key",
+            );
+            throw error;
         }
 
         const accessToken = sign(payload, privateKey, {
@@ -43,7 +28,6 @@ export class TokenService {
             expiresIn: "1h",
             issuer: "auth-service",
         });
-
         return accessToken;
     }
 
