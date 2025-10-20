@@ -41,7 +41,8 @@ export class TokenService {
             return accessToken;
         } catch (err) {
             console.error("JWT sign error:", err);
-            throw createHttpError(500, "Error while reading private key");
+            // throw createHttpError(500, "Error while reading private key");
+            throw err;
         }
     }
 
