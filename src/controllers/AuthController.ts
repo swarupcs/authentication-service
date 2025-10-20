@@ -10,6 +10,7 @@ import createHttpError from "http-errors";
 import { TokenService } from "../services/TokenService";
 import { CredentialService } from "../services/CredentialService";
 import { Roles } from "../constants";
+import { Config } from "../config";
 export class AuthController {
     constructor(
         private userService: UserService,
@@ -47,19 +48,6 @@ export class AuthController {
                 role: Roles.CUSTOMER,
             });
             this.logger.info("User has been registered", { id: user.id });
-            let privateKey: Buffer;
-            try {
-                privateKey = fs.readFileSync(
-                    path.join(__dirname, "../../certs/private.pem"),
-                );
-            } catch (err) {
-                const error = createHttpError(
-                    500,
-                    "Error while reading private key",
-                );
-                next(error);
-                return;
-            }
 
             const payload: JwtPayload = {
                 sub: String(user.id),

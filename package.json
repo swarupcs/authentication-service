@@ -12,6 +12,8 @@
         "lint:check": "eslint .",
         "lint:fix": "eslint . --fix",
         "test": "jest --no-cache --coverage --all --runInBand",
+        "test:debug": "jest --runInBand --verbose",
+        "test:ci": "jest --no-cache --coverage --all --runInBand --verbose --testTimeout=30000",
         "test:watch": "jest --watch --runInBand",
         "prepare": "husky",
         "start": "ts-node src/index.ts",
