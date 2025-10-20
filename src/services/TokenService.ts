@@ -23,11 +23,6 @@ export class TokenService {
                 .replace(/^\uFEFF/, "")
                 .trim();
 
-            // console.log(
-            //     "PRIVATE_KEY (first 80 chars):",
-            //     JSON.stringify(Config.PRIVATE_KEY?.slice(0, 80)),
-            // );
-
             // console.log("private key", privateKey);
             // 🔹 Ensure the key has the correct headers/footers
             if (!privateKey.startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
@@ -47,7 +42,6 @@ export class TokenService {
 
             return accessToken;
         } catch (err) {
-            console.error("🔴 JWT sign failed:", err);
             throw createHttpError(500, "Error while reading private key");
         }
     }
