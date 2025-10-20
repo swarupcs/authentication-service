@@ -4,65 +4,55 @@ import { Config } from "../config";
 import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
 import { Repository } from "typeorm";
+import fs from "fs";
+import os from "os";
+import path from "path";
 
 export class TokenService {
     constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
     generateAccessToken(payload: JwtPayload) {
-        let privateKey: string;
-        // console.log("Config.PRIVATE_KEY", Config.PRIVATE_KEY);
         if (!Config.PRIVATE_KEY) {
-            const error = createHttpError(500, "PRIVATE_KEY is not set");
-            throw error;
+            throw createHttpError(500, "PRIVATE_KEY is not set");
         }
 
         try {
-            privateKey = Config.PRIVATE_KEY;
-            // 🔹 Handle both formats:
-            // (1) Escaped with \n — common in GitHub Actions secrets
-            // (2) Actual multiline PEM — common in local .env files
+            let privateKey = Config.PRIVATE_KEY;
+
+            // Handle both escaped and real multiline PEMs
             if (privateKey.includes("\\n")) {
                 privateKey = privateKey.replace(/\\n/g, "\n");
             }
 
-            // Normalize line endings
+            // Normalize line endings and remove hidden characters
             privateKey = privateKey.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+            privateKey = privateKey.replace(/^\uFEFF/, "").trim() + "\n";
 
-            // ✅ Trim and ensure trailing newline for OpenSSL parsing
-            privateKey = privateKey.trim() + "\n";
+            // ✅ Write private key to a temporary file (Linux/OpenSSL-safe)
+            const tmpKeyPath = path.join(
+                os.tmpdir(),
+                `private-${Date.now()}.pem`,
+            );
+            fs.writeFileSync(tmpKeyPath, privateKey, { mode: 0o600 });
 
-            // ✅ Remove any invisible BOM characters
-            privateKey = privateKey.replace(/^\uFEFF/, "");
-
-            console.log(
-                "PRIVATE_KEY (first 80 chars):",
-                JSON.stringify(Config.PRIVATE_KEY?.slice(0, 80)),
+            // ✅ Use the file-based key for signing (works in CI & local)
+            const accessToken = sign(
+                payload,
+                fs.readFileSync(tmpKeyPath, "utf8"),
+                {
+                    algorithm: "RS256",
+                    expiresIn: "1h",
+                    issuer: "auth-service",
+                },
             );
 
-            console.log("PRIVATE_KEY length:", privateKey.length);
-            console.log("Starts with:", privateKey.slice(0, 40));
-            console.log("Ends with:", privateKey.slice(-40));
+            // Delete temp file immediately
+            fs.unlinkSync(tmpKeyPath);
 
-            // Optional debug (for CI verification)
-            // console.log("Private key starts with:", privateKey.slice(0, 50));
-            // privateKey = Config.PRIVATE_KEY?.replace(/\\n/g, "\n");
-
-            // console.log("private Key", privateKey);
+            return accessToken;
         } catch (err) {
-            const error = createHttpError(
-                500,
-                "Error while reading private key",
-            );
-            throw error;
+            console.error("JWT sign error:", err);
+            throw createHttpError(500, "Error while reading private key");
         }
-
-        // console.log("private Key", privateKey);
-
-        const accessToken = sign(payload, privateKey, {
-            algorithm: "RS256",
-            expiresIn: "1h",
-            issuer: "auth-service",
-        });
-        return accessToken;
     }
 
     generateRefreshToken(payload: JwtPayload) {
