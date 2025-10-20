@@ -3,17 +3,17 @@ on:
     # pull_request:
     #     branches:
     #         - main
-    # push:
-    #     branches:
-    #         - main
+    push:
+        branches:
+            - main
 
-    pull_request:
-        types: [closed]
-        branches: [main]
+    # pull_request:
+    #     types: [closed]
+    #     branches: [main]
 jobs:
     build-and-test:
         name: Build the project
-        if: github.event.pull_request.merged == true
+        # if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         # if: github.event_name == 'pull_request'
         steps:
