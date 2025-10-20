@@ -147,3 +147,4 @@ dist
 certs/
 public/
 
+.env.docker.prod
