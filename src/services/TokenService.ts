@@ -8,32 +8,51 @@ import { Repository } from "typeorm";
 export class TokenService {
     constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
     generateAccessToken(payload: JwtPayload) {
-        let privateKey: string;
         if (!Config.PRIVATE_KEY) {
             const error = createHttpError(500, "PRIVATE_KEY is not set");
             throw error;
         }
 
         try {
-            privateKey = Config.PRIVATE_KEY;
-            // privateKey = Config.PRIVATE_KEY?.replace(/\\n/g, "\n");
-            console.log("private key", privateKey);
+            let privateKey = Config.PRIVATE_KEY;
+
+            // Normalize newlines (redundant but safe)
+            privateKey =
+                privateKey
+                    .replace(/\r\n/g, "\n")
+                    .replace(/\r/g, "\n")
+                    .replace(/\\n/g, "\n")
+                    .replace(/^\uFEFF/, "")
+                    .trim() + "\n";
+
+            // 🧠 Add these diagnostic logs:
+            console.log(
+                "🔍 PRIVATE_KEY line count:",
+                privateKey.split("\n").length,
+            );
+            console.log("🔍 First line:", privateKey.split("\n")[0]);
+            console.log("🔍 Last line:", privateKey.split("\n").slice(-2)[0]);
+            console.log(
+                "🔍 Starts with:",
+                JSON.stringify(privateKey.slice(0, 40)),
+            );
+            console.log("🔍 Ends with:", JSON.stringify(privateKey.slice(-40)));
+
+            const accessToken = sign(payload, privateKey, {
+                algorithm: "RS256",
+                expiresIn: "1h",
+                issuer: "auth-service",
+            });
+
+            return accessToken;
         } catch (err) {
+            console.error("🔴 JWT sign failed:", err);
             const error = createHttpError(
                 500,
                 "Error while reading private key",
             );
             throw error;
         }
-
-        // console.log("private Key", privateKey);
-
-        const accessToken = sign(payload, privateKey, {
-            algorithm: "RS256",
-            expiresIn: "1h",
-            issuer: "auth-service",
-        });
-        return accessToken;
     }
 
     generateRefreshToken(payload: JwtPayload) {

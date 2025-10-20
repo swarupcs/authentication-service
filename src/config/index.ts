@@ -18,7 +18,7 @@ const {
     // PRIVATE_KEY,
 } = process.env;
 
-const PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
+let PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
 MIIEpAIBAAKCAQEAxEkqY07eksKmgHMFvcy8ydnhDGeZNVjx8sGpty59CZ8BIqqs
 M6T7HkrJgNRi/m2FxiiLgQ3CKNlrqjUml4JMf3GcLCSkfwUrqnTU6mE0RYrF6trD
 94mlm0tygbyfmgiR2tSa6bslUHM/yUo4hMccvJi7cEGjBK8P07XpLrF60v34JUMx
@@ -45,6 +45,14 @@ cK4XgQKBgQCjmetGYlEs3LsvZj2rZDxpFsuwAK02M3OF9TqzuwbhK4ooBfBWVPG4
 ME/gSXoGlBgL0TWCIbY1Nv4aZB+WBG4G6+oGNvuq2UKMdRpns8dPEW1/Mn/SFkYN
 QlFFcdfxLq6CaDiaZlmycBJ8OdCEosEydTBwvy9uPGYPo06GQOLrGg==
 -----END RSA PRIVATE KEY-----`;
+
+// Normalize the PEM
+PRIVATE_KEY =
+    PRIVATE_KEY.trim()
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .replace(/\\n/g, "\n")
+        .replace(/^\uFEFF/, "") + "\n";
 
 export const Config = {
     PORT,
