@@ -37,6 +37,8 @@ describe("POST /auth/register", () => {
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
+            console.log("response", response);
+            console.log("response.statusCode", response.statusCode);
 
             // Assert
             expect(response.statusCode).toBe(201);
@@ -93,6 +95,9 @@ describe("POST /auth/register", () => {
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
+
+            console.log("response", response);
+            console.log("response.body", response.body);
 
             // Assert
             expect(response.body).toHaveProperty("id");
@@ -175,6 +180,7 @@ describe("POST /auth/register", () => {
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
+            console.log("response", response);
 
             interface Headers {
                 ["set-cookie"]?: string[];
@@ -217,6 +223,8 @@ describe("POST /auth/register", () => {
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
+
+            console.log("response", response);
 
             // Assert
             const refreshTokenRepo = connection.getRepository(RefreshToken);
