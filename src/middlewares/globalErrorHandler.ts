@@ -9,14 +9,18 @@ export const globalErrorHandler = (
     res: Response,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-     
+
     next: NextFunction,
 ) => {
     const errorId = uuidv4();
     const statusCode = err.status || 500;
 
     const isProduction = process.env.NODE_ENV === "production";
-    const message = isProduction ? "Internal server error" : err.message;
+    /// todo: error message should be more user friendly if 400 then send to client
+    let message = "Internal server error";
+    if (statusCode === 400) {
+        message = err.message;
+    }
 
     logger.error(err.message, {
         id: errorId,
