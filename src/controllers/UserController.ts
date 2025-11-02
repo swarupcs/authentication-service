@@ -1,9 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { UserService } from "../services/UserService";
-import { CreateUserRequest, UpdateUserRequest } from "../types";
+import {
+    CreateUserRequest,
+    UpdateUserRequest,
+    UserQueryParams,
+} from "../types";
 import createHttpError from "http-errors";
 import { Logger } from "winston";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 
 export class UserController {
     constructor(
@@ -15,9 +19,9 @@ export class UserController {
         // Validation
         const result = validationResult(req);
         if (!result.isEmpty()) {
-            res.status(400).json({ errors: result.array() });
-            return;
+            return res.status(400).json({ errors: result.array() });
         }
+
         const { firstName, lastName, email, password, tenantId, role } =
             req.body;
         try {
@@ -42,8 +46,7 @@ export class UserController {
         // Validation
         const result = validationResult(req);
         if (!result.isEmpty()) {
-            res.status(400).json({ errors: result.array() });
-            return;
+            return res.status(400).json({ errors: result.array() });
         }
 
         const { firstName, lastName, role } = req.body;
@@ -72,11 +75,20 @@ export class UserController {
     }
 
     async getAll(req: Request, res: Response, next: NextFunction) {
+        const validatedQuery = matchedData(req, { onlyValidData: true });
+
         try {
-            const users = await this.userService.getAll();
+            const [users, count] = await this.userService.getAll(
+                validatedQuery as UserQueryParams,
+            );
 
             this.logger.info("All users have been fetched");
-            res.json(users);
+            res.json({
+                currentPage: validatedQuery.currentPage as number,
+                perPage: validatedQuery.perPage as number,
+                total: count,
+                data: users,
+            });
         } catch (err) {
             next(err);
         }

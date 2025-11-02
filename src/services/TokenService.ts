@@ -28,6 +28,7 @@ export class TokenService {
             expiresIn: "1h",
             issuer: "auth-service",
         });
+
         return accessToken;
     }
 
@@ -38,6 +39,7 @@ export class TokenService {
             issuer: "auth-service",
             jwtid: String(payload.id),
         });
+
         return refreshToken;
     }
 
