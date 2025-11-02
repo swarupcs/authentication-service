@@ -17,6 +17,7 @@ export interface AuthRequest extends Request {
         sub: string;
         role: string;
         id?: string;
+        tenant: string;
     };
 }
 
@@ -46,8 +47,23 @@ export interface LimitedUserData {
     firstName: string;
     lastName: string;
     role: string;
+    email: string;
+    tenantId: number;
 }
 
 export interface UpdateUserRequest extends Request {
     body: LimitedUserData;
+}
+
+export interface UserQueryParams {
+    perPage: number;
+    currentPage: number;
+    q: string;
+    role: string;
+}
+
+export interface TenantQueryParams {
+    q: string;
+    perPage: number;
+    currentPage: number;
 }
